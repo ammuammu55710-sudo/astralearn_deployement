@@ -12,6 +12,7 @@ class CustomUser(AbstractUser):
     ]
     learning_style = models.CharField(max_length=20, choices=LEARNING_STYLES, default='visual')
     interests = models.CharField(max_length=255, blank=True, help_text="Comma-separated topics (e.g., Math, Physics, Coding)")
+    is_faculty = models.BooleanField(default=False)
     avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
 
     def __str__(self):

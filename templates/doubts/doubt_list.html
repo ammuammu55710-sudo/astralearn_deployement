@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <h2>Doubt Peer Community</h2>
+    <a href="{% url 'create_doubt' %}" class="btn-primary">Ask a Doubt</a>
+</div>
+
+<div class="glass-panel" style="margin-bottom: 2rem;">
+    <form method="GET" style="display: flex; gap: 0.5rem;">
+        <input type="text" name="subject" placeholder="Filter by subject (e.g., Physics)..."
+            style="flex: 1; margin: 0;">
+        <button type="submit" class="btn-primary">Filter</button>
+    </form>
+</div>
+
+<div class="card-grid">
+    {% for doubt in doubts %}
+    <div class="card"
+        style="border-left: 3px solid {% if doubt.is_resolved %}#44ff44{% else %}var(--primary-color){% endif %};">
+        <div style="display: flex; justify-content: space-between; align-items: start;">
+            <span style="font-size: 0.7rem; color: var(--secondary-color); text-transform: uppercase;">{{ doubt.subject
+                }}</span>
+            {% if doubt.is_resolved %}
+            <span style="font-size: 0.7rem; color: #44ff44;">RESOLVED</span>
+            {% endif %}
+        </div>
+        <h3 style="margin: 0.5rem 0;">{{ doubt.title }}</h3>
+        <p style="font-size: 0.9rem; opacity: 0.8;">{{ doubt.content|truncatechars:150 }}</p>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+            <span style="font-size: 0.8rem; opacity: 0.6;">By {{ doubt.user.username }}</span>
+            <a href="{% url 'doubt_detail' doubt.pk %}" class="btn-glow" style="font-size: 0.8rem;">
+                {{ doubt.answers.count }} Answers
+            </a>
+        </div>
+    </div>
+    {% empty %}
+    <p>No doubts found. Be the first to ask!</p>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<a href="{% url 'doubt_list' %}"
+    style="text-decoration: none; color: var(--primary-color); display: inline-block; margin-bottom: 1rem;">&larr; Back
+    to Community</a>
+
+<div class="glass-panel" style="border-left: 5px solid var(--primary-color);">
+    <div style="display: flex; justify-content: space-between; align-items: start;">
+        <span style="font-size: 0.8rem; color: var(--secondary-color);">SUBJECT: {{ doubt.subject }}</span>
+        <span style="font-size: 0.8rem; opacity: 0.6;">Posted by {{ doubt.user.username }} on {{ doubt.created_at|date
+            }}</span>
+    </div>
+    <h1 style="margin: 1rem 0;">{{ doubt.title }}</h1>
+    <div
+        style="font-size: 1.1rem; line-height: 1.6; background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 10px;">
+        {{ doubt.content|linebreaksbr }}
+    </div>
+</div>
+
+<div class="glass-panel">
+    <h3>Community Answers ({{ answers.count }})</h3>
+    <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 1.5rem 0;">
+
+    <div style="display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2rem;">
+        {% for answer in answers %}
+        <div
+            style="background: rgba(255,255,255,0.03); padding: 1.2rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem;">
+                <span style="font-weight: bold; color: var(--secondary-color);">👤 {{ answer.user.username }}</span>
+                <span style="font-size: 0.8rem; opacity: 0.5;">{{ answer.created_at|timesince }} ago</span>
+            </div>
+            <p style="margin: 0;">{{ answer.content|linebreaksbr }}</p>
+        </div>
+        {% empty %}
+        <p style="font-style: italic; opacity: 0.6;">No answers yet. Share your knowledge!</p>
+        {% endfor %}
+    </div>
+
+    <h4 style="margin-bottom: 1rem;">Post Your Answer</h4>
+    <form method="POST">
+        {% csrf_token %}
+        <textarea name="content" rows="4" placeholder="Type your helpful answer here..." required></textarea>
+        <button type="submit" class="btn-primary" style="margin-top: 0.5rem;">Post Answer</button>
+    </form>
+</div>
+{% endblock %}
